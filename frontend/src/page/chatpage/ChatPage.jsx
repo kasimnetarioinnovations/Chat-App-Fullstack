@@ -20,10 +20,10 @@ const ChatPage = () => {
         </div>
 
         <div className="message-box-container d-flex px-4 py-2 gap-5">
-          <div>
+          <div className="">
             <Chat_list />
           </div>
-          <div><Messageuser_List/></div>
+          <div className="w-100"><Messageuser_List/></div>
         </div>
       </div>
     </div>
