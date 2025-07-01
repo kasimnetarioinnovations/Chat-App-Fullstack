@@ -1,5 +1,6 @@
 import React from 'react';
 import './Messageuser_List.css'
+import messageuserlogo from '../../assets/image/user-image.jpg';
 
 const Messageuser_List = () => {
   return (
@@ -8,7 +9,7 @@ const Messageuser_List = () => {
            <div className="message-header d-flex align-items-center justify-content-between">
               <div>
                 <div>
-                    <img src={message-user-logo} alt="message-user-logo" />
+                    <img src={messageuserlogo} alt="message-user-logo" />
                 </div>
               </div>
               <div></div>
