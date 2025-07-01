@@ -1,15 +1,14 @@
 import React from 'react';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
-import Chat_list from '../components/chatuser_list/Chat_list';
+import ChatPage from '../page/chatpage/ChatPage';
 
 const PageRouter = () => {
     const router =createBrowserRouter([
        {
-      path: "/chatlist",
+      path: "/",
       element: (
         <>
-          <Chat_list/>
+          <ChatPage/>
         </>
       ),
     },
