@@ -5,7 +5,7 @@ const ChatPage = () => {
   return (
     <div>
        <div style={{backgroundColor:"#f7f7f7"}}>
-        <div className="chat-header"></div>
+        <div className="chat-header">hader</div>
 
         <div className="message-box-container d-flex">
             <div>
