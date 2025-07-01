@@ -1,10 +1,11 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import PageRouter from './Router/PageRouter';
 
 const App = () => {
   return (
     <div>
-       <h1 className='bg-primary'>Chat App</h1>
+       <PageRouter/>
     </div>
   );
 }
