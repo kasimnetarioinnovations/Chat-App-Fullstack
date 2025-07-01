@@ -1,3 +1,41 @@
-h1{
-    color: red;
+.chat-list-header{
+    padding: 10px 15px;
+    background-color: white;
+    width: 300px;
+    border: 1px solid rgb(225, 223, 223);
+    border-radius: 5px;
+    height: 600px;
+}
+
+.chat-list-name{
+    color: black;
+    font-weight: bold;
+}
+
+.chat-list-search-box{
+    border: 1px solid rgb(225, 223, 223);
+    border-radius: 5px;
+    padding: 1px 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
+    height: 40px;
+    margin-bottom: 5px;
+}
+
+.chat-list-search-input{
+    border: none;
+    outline: none;
+    width: 250px;
+    font-size: small;
+}
+
+.chat-list-user{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border: 1px solid rgb(225, 223, 223);
+    border-radius: 5px;
+    box-shadow: 5px solid black;
 }

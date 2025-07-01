@@ -1,6 +1,7 @@
 import React from 'react';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ChatPage from '../page/chatpage/ChatPage';
+import Chat_list from '../components/chatuser_list/Chat_list';
 
 const PageRouter = () => {
     const router =createBrowserRouter([
@@ -11,7 +12,14 @@ const PageRouter = () => {
           <ChatPage/>
         </>
       ),
-    },
+    },{
+      path: "/chatlist",
+      element: (
+        <>
+          <Chat_list/>
+        </>
+      ),
+    }
     ])
   return (
 
