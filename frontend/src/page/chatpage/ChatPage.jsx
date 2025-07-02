@@ -7,7 +7,7 @@ import Messageuser_List from "../../components/messageuser_list/Messageuser_List
 const ChatPage = () => {
   return (
     <div>
-      <div style={{ backgroundColor: "#f7f7f7" }}>
+      <div style={{ backgroundColor: "#f7f7f7", height:"100vh"}}>
         <div className="chat-header d-flex justify-content-between align-items-center px-4 py-2">
           <div>
             <strong style={{fontSize:"22px", color:"#304154"}}>Chat</strong>
@@ -24,6 +24,8 @@ const ChatPage = () => {
             <Chat_list />
           </div>
           <div className="w-100"><Messageuser_List/></div>
+
+          
         </div>
       </div>
     </div>

@@ -1,0 +1,16 @@
+
+.threedot-setting{
+    transition: 0.5s;
+}
+.threedot-setting:hover{ 
+    color: rgb(243, 210, 63);
+}
+.message-date{
+    
+}
+.message-chat-box{
+    overflow-y: auto;
+}
+.message-chat-box::-webkit-scrollbar{
+    display: none;
+}
