@@ -3,7 +3,7 @@ import './Chat_list.css'
 import { CiSearch } from "react-icons/ci";
 import messageuserlogo from '../../assets/image/user-image.jpg';
 
-const Chat_list = () => {
+const Chat_list = ({ onUserSelect }) => {
   const backendurl = import.meta.env.VITE_BACKEND_URL;
 
   const [user, setUser] = useState([]);
@@ -39,7 +39,7 @@ const Chat_list = () => {
       {user.map(users => (
       <>
       {/* user list */}
-      <div className='chat-list-user' key={users._id}>
+      <div className='chat-list-user' key={users._id}  onClick={() => onUserSelect(users)}>
 
         {/* image name text*/}
         <div className='chat-list-user-leftbox'>

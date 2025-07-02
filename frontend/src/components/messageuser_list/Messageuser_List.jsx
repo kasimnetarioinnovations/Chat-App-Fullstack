@@ -12,11 +12,16 @@ import { CiFolderOn } from "react-icons/ci";
 import { BsSend } from "react-icons/bs";
 import SendFileModel from "./SendFileModel";
 
-const Messageuser_List = () => {
+const Messageuser_List = ({ selectedUser }) => {
   const [clickDropdown, setClickDropdown] = useState();
   const [clickDropdowntwo, setClickDropdownTwo] = useState();
+  
+  const loginuser = "685a3cba84d4271061452262"
+  const selectedperson = selectedUser?._id;
+
+  const personname = selectedUser?.name;
   return (
-    <div>
+    <div className="w-100">
       <div
         className="message-container"
         style={{
@@ -69,7 +74,7 @@ const Messageuser_List = () => {
               ></div>
             </div>
             <div>
-              <strong>Anthony Lewis</strong>
+              <strong>{personname}</strong>
               <p style={{ marginBottom: "0", color: "grey" }}>Online</p>
             </div>
           </div>
@@ -195,7 +200,7 @@ const Messageuser_List = () => {
               </span>
 
               <span style={{ color: "grey" }}>
-                <span style={{ color: "black" }}>Anthony Lewis</span>
+                <span style={{ color: "black" }}>{selectedUser?.name}</span>
                 <GoDotFill style={{ color: "#e3e0e0" }} />
                 08:00 AM
                 <IoCheckmarkDone style={{ color: "green" }} />
@@ -220,12 +225,12 @@ const Messageuser_List = () => {
             <hr style={{ width: "100% " }} />
           </div>
         </div>
-        <div style={{ padding: "10px", position: "fixed", bottom: "20px" }}>
+        <div style={{ width:"100%", padding: "10px", position: "absolute", bottom: "5px" }}>
           <div
             className="message-send-container"
             style={{
               backgroundColor: "#f7f7f7",
-              width: "75.36vw",
+              // width: "75.36vw",
               border: "1px solid #e7e0e0",
               borderRadius: "10px",
               display: "flex",

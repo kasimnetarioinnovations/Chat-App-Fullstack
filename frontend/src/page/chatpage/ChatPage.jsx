@@ -1,10 +1,13 @@
-import React from "react";
+import React, {useState} from "react";
 import Chat_list from "../../components/chatuser_list/Chat_list";
 import { SlRefresh } from "react-icons/sl";
 import { RiArrowDropUpLine } from "react-icons/ri";
 import Messageuser_List from "../../components/messageuser_list/Messageuser_List";
 
 const ChatPage = () => {
+  const [messageUserList, setMessageUserList] =useState ()
+   const [selectedUser, setSelectedUser] = useState(null);
+
   return (
     <div>
       <div style={{ backgroundColor: "#f7f7f7", height:"100vh"}}>
@@ -20,10 +23,15 @@ const ChatPage = () => {
         </div>
 
         <div className="message-box-container d-flex px-4 py-2 gap-4">
-          <div className="">
-            <Chat_list />
+          <div  onClick={setMessageUserList} className="" style={{cursor:"pointer"}}>
+            <Chat_list onUserSelect={setSelectedUser}/>
           </div>
-          <div className="w-100"><Messageuser_List/></div>
+          {selectedUser && (
+  <Messageuser_List selectedUser={selectedUser} />
+)}
+           
+           
+          {/* <div className="w-100 d-none"><Messageuser_List/></div> */}
 
           
         </div>
