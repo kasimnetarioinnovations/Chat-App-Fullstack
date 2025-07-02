@@ -1,9 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './Chat_list.css'
 import { CiSearch } from "react-icons/ci";
 import messageuserlogo from '../../assets/image/user-image.jpg';
 
 const Chat_list = () => {
+  const backendurl = import.meta.env.VITE_BACKEND_URL;
+
+  const [user, setUser] = useState([]);
+
+  const [error, setError] = useState('');
+
+  const fetchUser = () => {
+    fetch(`${backendurl}/user/list`)
+    .then(res => res.json())
+    .then(data => {setUser(data.user);})
+    .catch(error => {setError('Server Response : ' + error.message);});
+  };
+  useEffect(() => { fetchUser(); });
+
   return (
     <div className='chat-list-header'>
 
@@ -18,8 +32,14 @@ const Chat_list = () => {
         <CiSearch />
       </div>
 
+
+      <div className='chat-list-usersection'>
+      {error && <p>{error}</p>}
+
+      {user.map(users => (
+      <>
       {/* user list */}
-      <div className='chat-list-user'>
+      <div className='chat-list-user' key={users._id}>
 
         {/* image name text*/}
         <div className='chat-list-user-leftbox'>
@@ -30,7 +50,7 @@ const Chat_list = () => {
 
           <div>
           <div>
-          <span className='txt0'><b>Anthony Lewis</b></span>
+          <span className='txt0'><b>{users.name}</b></span>
           </div>
           <div style={{marginTop:'-8px'}}>
           <span className='txt'>is typing ...</span>
@@ -45,6 +65,10 @@ const Chat_list = () => {
           <br/>
           <span className='txt' style={{display:'flex', justifyContent:'end'}}>52</span>
         </div>
+
+      </div>
+      </>
+      ))}
 
       </div>
 

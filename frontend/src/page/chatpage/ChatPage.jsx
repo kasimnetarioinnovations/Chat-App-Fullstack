@@ -19,7 +19,7 @@ const ChatPage = () => {
           </div>
         </div>
 
-        <div className="message-box-container d-flex px-4 py-2 gap-5">
+        <div className="message-box-container d-flex px-4 py-2 gap-4">
           <div className="">
             <Chat_list />
           </div>
