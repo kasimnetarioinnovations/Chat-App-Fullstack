@@ -112,9 +112,9 @@ const Messageuser_List = ({ selectedUser }) => {
 
   socket.emit("user-connected", currentuser._id); // Send current user ID
 
-  socket.on("getOnlineUsers", (users) => {
-    setOnlineUsers(users);
-  });
+ socket.on("update-user-status", (users) => {
+  setOnlineUsers(users);
+});
 
   return () => {
     socket.disconnect(); // Clean up

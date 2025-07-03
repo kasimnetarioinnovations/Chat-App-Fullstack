@@ -32,9 +32,9 @@ const Chat_list = ({ onUserSelect }) => {
 
   socket.emit("user-connected", currentUser._id); // Send current user ID
 
-  socket.on("getOnlineUsers", (users) => {
-    setOnlineUsers(users);
-  });
+ socket.on("update-user-status", (users) => {
+  setOnlineUsers(users);
+});
 
   return () => {
     socket.disconnect(); // Clean up
