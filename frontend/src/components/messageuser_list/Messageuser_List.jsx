@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./Messageuser_List.css";
-import message_user_logo from "../../assets/image/user-image.jpg";
 import { IoIosSearch } from "react-icons/io";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import HeaderNotificationSetting_Model from "./HeaderNotificationSetting_Model";
@@ -16,15 +15,42 @@ const Messageuser_List = ({ selectedUser }) => {
   const [clickDropdown, setClickDropdown] = useState();
   const [clickDropdowntwo, setClickDropdownTwo] = useState();
 
+  const person = selectedUser?._id;
   const personname = selectedUser?.name;
+  const profileimage = selectedUser?.image;
 
   const currentuser = JSON.parse(localStorage.getItem("currentUser"));
   const user = currentuser._id;
-  const profileimage = selectedUser?.image;
+  
+  const [userData, setUserData] = useState(null);
+  const [error, setError] = useState(null);
 
-  const users = currentuser;
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/user/profile`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id: currentuser._id }),
+        });
 
-  const person = selectedUser?._id;
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+
+        const data = await response.json();
+        setUserData(data);
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+
+    if (currentuser?._id) {
+      fetchUserData();
+    }
+  }, [currentuser]);
 
   const [msg, setText] = useState("");
   const [message, setMessage] = useState("");
@@ -118,7 +144,7 @@ const Messageuser_List = ({ selectedUser }) => {
                 />
                   ) : (
                     <div className="user-initials" style={{width:"100%", height:"100%", objectFit:"cover", borderRadius:"50%"}}>
-                      {selectedUser.name.slice(0, 2).toUpperCase()}
+                      {selectedUser && selectedUser.name ? selectedUser.name.slice(0, 2).toUpperCase() : ""}
                     </div>
                   )}
 
@@ -176,7 +202,7 @@ const Messageuser_List = ({ selectedUser }) => {
                   ? "you-message-conatiner d-flex justify-content-end position-relative"
                   : "other-message-conatiner d-flex justify-content-start position-relative"
               }
-              key={index}
+              key={msg._id || index}
               style={{
                 marginBottom: "10px",
               }}
@@ -200,7 +226,7 @@ const Messageuser_List = ({ selectedUser }) => {
                 />
                   ) : (
                     <div className="user-initials" style={{width:"100%", height:"100%", objectFit:"cover", borderRadius:"50%"}}>
-                      {selectedUser.name.slice(0, 2).toUpperCase()}
+                      {selectedUser && selectedUser.name ? selectedUser.name.slice(0, 2).toUpperCase() : ""}
                     </div>
                 )}
 
@@ -225,16 +251,20 @@ const Messageuser_List = ({ selectedUser }) => {
                     marginLeft: "10px",
                   }}
                 >
-                  <img
-                    src={message_user_logo}
-                    alt="message-user-logo"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      borderRadius: "50%",
-                    }}
-                  />
+
+                {userData && userData.user && userData.user.image ? (  
+                <img
+                  src={`${backendUrl}/uploads/${userData.user.image}`}
+                  alt={userData.user.name}
+                  className=""
+                  style={{width:"100%", height:"100%", objectFit:"cover", borderRadius:"50%"}}
+                />
+                  ) : (
+                    <div className="user-initials" style={{width:"100%", height:"100%", objectFit:"cover", borderRadius:"50%"}}>
+                      {userData && userData.user && userData.user.name ? userData.user.name.slice(0, 2).toUpperCase() : ""}
+                    </div>
+                )}
+
                 </span>
               )}
             </div>
@@ -257,6 +287,7 @@ const Messageuser_List = ({ selectedUser }) => {
             <hr style={{ width: "100% " }} />
           </div>
 
+          {error && <p style={{ textAlign: "center" }}>{error}</p>}
           {message && <p style={{ textAlign: "center" }}>{message}</p>}
         </div>
 
