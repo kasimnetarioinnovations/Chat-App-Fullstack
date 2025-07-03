@@ -63,31 +63,67 @@ const Messageuser_List = ({ selectedUser }) => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   // const socket = io(import.meta.env.VITE_BACKEND_URL);
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const res = await fetch(`${backendUrl}/chat/sendmsg`, {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({
+  //         user,
+  //         person,
+  //         msg: Array.isArray(msg) ? msg : [msg], // Ensure text is an array
+  //       }),
+  //     });
+
+  //     const data = await res.json();
+
+  //     if (res.ok) {
+  //       setMessage("Message Send");
+  //       setText("");
+  //     } else {
+  //       setMessage("Server Response : " + data.error || "Error");
+  //     }
+  //   } catch (error) {
+  //     setMessage("Error : " + error.message);
+  //   }
+  // };
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch(`${backendUrl}/chat/sendmsg`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user,
-          person,
-          msg: Array.isArray(msg) ? msg : [msg], // Ensure text is an array
-        }),
-      });
+  e.preventDefault();
 
-      const data = await res.json();
+  if (!msg.trim()) return;
 
-      if (res.ok) {
-        setMessage("Message Send");
-        setText("");
-      } else {
-        setMessage("Server Response : " + data.error || "Error");
-      }
-    } catch (error) {
-      setMessage("Error : " + error.message);
-    }
+  const newMessage = {
+    sender: user,
+    text: msg,
+    timestamp: new Date().toISOString(),
   };
+
+  // Push to chat immediately (optimistic UI)
+  setChat((prev) => [...prev, newMessage]);
+  setText("");
+
+  try {
+    const res = await fetch(`${backendUrl}/chat/sendmsg`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        user,
+        person,
+        msg: [msg],
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      setMessage("Server Response : " + data.error || "Error");
+    }
+  } catch (error) {
+    setMessage("Error : " + error.message);
+  }
+};
+
 
   //call server to list products
   const fetchChat = () => {
@@ -106,9 +142,12 @@ const Messageuser_List = ({ selectedUser }) => {
   };
 
   //to fetch list of products
+  // useEffect(() => {
+  //   fetchChat();
+  // });
   useEffect(() => {
-    fetchChat();
-  });
+  fetchChat();
+}, [person]);
   useEffect(() => {
   const socket = io(import.meta.env.VITE_BACKEND_URL);
 

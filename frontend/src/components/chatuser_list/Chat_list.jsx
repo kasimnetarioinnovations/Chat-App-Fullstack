@@ -4,6 +4,7 @@ import { CiSearch } from "react-icons/ci";
 import messageuserlogo from "../../assets/image/user-image.jpg";
 import { io } from "socket.io-client";
 
+
 const Chat_list = ({ onUserSelect }) => {
   const backendurl = import.meta.env.VITE_BACKEND_URL;
   // const socket = io(import.meta.env.VITE_BACKEND_URL);
@@ -12,6 +13,7 @@ const Chat_list = ({ onUserSelect }) => {
 
   const [error, setError] = useState("");
   const [onlineUsers, setOnlineUsers] = useState([]);
+  const [lastMessages, setLastMessages] = useState([]);
 
   const fetchUser = () => {
     fetch(`${backendurl}/user/list`)
@@ -23,9 +25,10 @@ const Chat_list = ({ onUserSelect }) => {
         setError("Server Response : " + error.message);
       });
   };
-  useEffect(() => {
-    fetchUser();
-  });
+ useEffect(() => {
+  fetchUser();
+}, []);
+
    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   useEffect(() => {
   const socket = io(import.meta.env.VITE_BACKEND_URL);
@@ -79,6 +82,28 @@ const isUserOnline = (userId) => {
   input.click();
 };
 
+const fetchLastMessages = () => {
+  fetch(`${backendurl}/chat/last-messages`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userId: currentUser._id }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      setLastMessages(data);
+    })
+    .catch((err) => {
+      console.error("Error fetching last messages:", err);
+    });
+};
+
+useEffect(() => {
+  fetchUser();
+  fetchLastMessages();
+}, []);
+const getLastMessageData = (userId) => {
+  return lastMessages.find((msg) => msg.userId === userId);
+};
 
   return (
     <div className="chat-list-header">
