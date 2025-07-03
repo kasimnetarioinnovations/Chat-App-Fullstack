@@ -4,7 +4,10 @@ import { CiSearch } from "react-icons/ci";
 import messageuserlogo from '../../assets/image/user-image.jpg';
 
 const Chat_list = ({ onUserSelect }) => {
+  
   const backendurl = import.meta.env.VITE_BACKEND_URL;
+
+  const loginuser = "685a3cba84d4271061452262" // Aditya id
 
   const [user, setUser] = useState([]);
 
@@ -36,7 +39,7 @@ const Chat_list = ({ onUserSelect }) => {
       <div className='chat-list-usersection'>
       {error && <p>{error}</p>}
 
-      {user.map(users => (
+      {user.filter((users) => users._id !== loginuser).map(users => (
       <>
       {/* user list */}
       <div className='chat-list-user' key={users._id}  onClick={() => onUserSelect(users)}>
