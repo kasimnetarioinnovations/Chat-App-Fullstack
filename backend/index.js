@@ -5,6 +5,7 @@ const cors = require('cors');
 const mongoose = require("mongoose");
 const UserRouter = require('./routes/users.routes');
 const ChatRoutes = require('./routes/chat.routes');
+const path = require('path');
 
 app.use(express.json());
 app.use(cors());
@@ -23,3 +24,5 @@ app.listen(process.env.PORT, () => { console.log(`server is running at - http://
 
 app.use("/user", UserRouter);
 app.use("/chat", ChatRoutes);
+// Static folder to serve images
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

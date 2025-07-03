@@ -87,3 +87,15 @@
     font-size: small;
     color: rgb(132, 131, 131);
 }
+.user-initials {
+  background-color: #ccc;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 16px;
+  color: #fff;
+}

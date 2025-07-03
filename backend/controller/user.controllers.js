@@ -27,7 +27,26 @@ const registerUser = async (req, res) => {
   }
 };
 
+// ✅ New image upload controller
+const uploadImage = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const fileName = req.file.filename;
+
+    const updatedUser = await UserModule.findByIdAndUpdate(
+      id,
+      { image: fileName },
+      { new: true }
+    );
+
+    res.status(200).json({ message: "Image uploaded", user: updatedUser });
+  } catch (error) {
+    res.status(500).json({ message: "Upload failed", error: error.message });
+  }
+};
+
 module.exports = {
   listUser,
-  registerUser
+  registerUser,
+   uploadImage
 };

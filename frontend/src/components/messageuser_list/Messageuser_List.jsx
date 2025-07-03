@@ -15,58 +15,64 @@ import SendFileModel from "./SendFileModel";
 const Messageuser_List = ({ selectedUser }) => {
   const [clickDropdown, setClickDropdown] = useState();
   const [clickDropdowntwo, setClickDropdownTwo] = useState();
-  
+
   const personname = selectedUser?.name;
 
   const currentuser = JSON.parse(localStorage.getItem("currentUser"));
   const user = currentuser._id;
+  const profileimage = selectedUser?.image;
+
+  const users = currentuser;
 
   const person = selectedUser?._id;
 
-  const [msg, setText] = useState('');
-  const [message, setMessage] = useState('');
+  const [msg, setText] = useState("");
+  const [message, setMessage] = useState("");
 
   const [chat, setChat] = useState([]);
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-  const handleSubmit = async(e) => {
-        e.preventDefault();
-        try{
-            const res = await fetch(`${backendUrl}/chat/sendmsg`, {
-                method: 'POST',
-                headers: { 'Content-Type' : 'application/json' },
-                body: JSON.stringify({
-                  user,
-                  person,
-                  msg: Array.isArray(msg) ? msg : [msg] // Ensure text is an array
-                })
-            });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(`${backendUrl}/chat/sendmsg`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user,
+          person,
+          msg: Array.isArray(msg) ? msg : [msg], // Ensure text is an array
+        }),
+      });
 
-            const data = await res.json();
+      const data = await res.json();
 
-            if(res.ok){
-                setMessage('Message Send');
-                setText('');
-            } else {
-                setMessage('Server Response : ' + data.error || 'Error');
-            }
-
-        } catch(error) {
-            setMessage('Error : ' + error.message);
-        }
+      if (res.ok) {
+        setMessage("Message Send");
+        setText("");
+      } else {
+        setMessage("Server Response : " + data.error || "Error");
+      }
+    } catch (error) {
+      setMessage("Error : " + error.message);
     }
+  };
 
   //call server to list products
   const fetchChat = () => {
     fetch(`${backendUrl}/chat/messages`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ user, person })
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user, person }),
     })
-    .then(res => res.json())
-    .then(data => { setChat(data.messages); })
-    .catch(error => { setMessage('Server Response : ' + error.message); });
+      .then((res) => res.json())
+      .then((data) => {
+        setChat(data.messages);
+      })
+      .catch((error) => {
+        setMessage("Server Response : " + error.message);
+      });
   };
 
   //to fetch list of products
@@ -103,16 +109,20 @@ const Messageuser_List = ({ selectedUser }) => {
                 position: "relative",
               }}
             >
+                {profileimage ? (
+                    
               <img
-                src={message_user_logo}
-                alt="message-user-logo"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  borderRadius: "50%",
-                }}
-              />
+                  src={`${backendUrl}/uploads/${profileimage}`}
+                  alt={user.name}
+                  className=""
+                  style={{width:"100%", height:"100%", objectFit:"cover", borderRadius:"50%"}}
+                />
+                  ) : (
+                    <div className="user-initials" style={{width:"100%", height:"100%", objectFit:"cover", borderRadius:"50%"}}>
+                      {selectedUser.name.slice(0, 2).toUpperCase()}
+                    </div>
+                  )}
+
               <div
                 style={{
                   backgroundColor: "green",
@@ -158,58 +168,63 @@ const Messageuser_List = ({ selectedUser }) => {
           </div>
         </div>
 
-        <div className="message-chat-box" style={{ padding: "20px 90px",}}>
-          
-          {Array.isArray(chat) && chat.map((msgs, index) => (
-          <div className="you-message-conatiner d-flex justify-content-end  position-relative" key={index}>
-            <div
-              className="message-box"
-              style={{
-                backgroundColor: "#f3f2f2",
-                width: "500px",
-                borderRadius: "5px",
-                padding: "5px 12px",
-              }}
-            >
-              <p className="mb-0">
-                {msgs}
-              </p>
-            </div>
-            <div
-              style={{
-                position: "absolute",
-                top: "50px",
-                right: "-70px",
-                display: "flex",
-                alignItems: "end",
-                gap: "8px",
-              }}
-            >
-              <span style={{ color: "grey" }}>
-                <IoCheckmarkDone style={{ color: "green" }} /> 08:00 AM
-                <GoDotFill style={{ color: "#e3e0e0" }} />
-                <span style={{ color: "black" }}>You</span>
-              </span>
-              <span className="d-flex gap-3">
-                {" "}
-                <span
-                  style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+        <div className="message-chat-box" style={{ padding: "20px 90px" }}>
+          {Array.isArray(chat) &&
+            chat.map((msgs, index) => (
+              <div
+                className="you-message-conatiner d-flex justify-content-end  position-relative"
+                key={index}
+              >
+                <div
+                  className="message-box"
+                  style={{
+                    backgroundColor: "#f3f2f2",
+                    width: "500px",
+                    borderRadius: "5px",
+                    padding: "5px 12px",
+                  }}
                 >
-                  <img
-                    src={message_user_logo}
-                    alt="message-user-logo"
-                    style={{
-                      width: "50px",
-                      height: "50px",
-                      objectFit: "cover",
-                      borderRadius: "50%",
-                    }}
-                  />
-                </span>
-              </span>
-            </div>
-          </div>
-          ))}
+                  <p className="mb-0">{msgs}</p>
+                </div>
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "50px",
+                    right: "-70px",
+                    display: "flex",
+                    alignItems: "end",
+                    gap: "8px",
+                  }}
+                >
+                  <span style={{ color: "grey" }}>
+                    <IoCheckmarkDone style={{ color: "green" }} /> 08:00 AM
+                    <GoDotFill style={{ color: "#e3e0e0" }} />
+                    <span style={{ color: "black" }}>You</span>
+                  </span>
+                  <span className="d-flex gap-3">
+                    {" "}
+                    <span
+                      style={{
+                        width: "50px",
+                        height: "50px",
+                        borderRadius: "50%",
+                      }}
+                    >
+                      <img
+                        src={message_user_logo}
+                        alt="message-user-logo"
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          objectFit: "cover",
+                          borderRadius: "50%",
+                        }}
+                      />
+                    </span>
+                  </span>
+                </div>
+              </div>
+            ))}
 
           <div className="other-message-conatiner py-5  position-relative">
             <div
@@ -281,81 +296,90 @@ const Messageuser_List = ({ selectedUser }) => {
             <hr style={{ width: "100% " }} />
           </div>
 
-          {message && <p style={{textAlign:'center'}}>{message}</p>}
-
+          {message && <p style={{ textAlign: "center" }}>{message}</p>}
         </div>
 
-        <div style={{ width:"100%", padding: "10px", position: "absolute", bottom: "5px" }}>
-        <form onSubmit={handleSubmit}>
-          <div
-            className="message-send-container"
-            style={{
-              backgroundColor: "#f7f7f7",
-              // width: "75.36vw",
-              border: "1px solid #e7e0e0",
-              borderRadius: "10px",
-              display: "flex",
-              justifyContent: "space-between",
-              padding: "10px 10px",
-              position:"relative"
-            }}
-          >
-          
-            <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-              <MdOutlineKeyboardVoice style={{ fontSize: "25px" }} />
-              {/* <span >Type Your Message</span> */}
-              <input
-                style={{
-                  width: "100%",
-                  height: "auto",
-                  backgroundColor: "#f7f7f7",
-                  color: "grey",
-                  fontSize: "13px",
-                  border: "none",
-                  outline: "none",
-                }}
-                type="text"
-                placeholder="Type Your Message"
-                value={msg}
-                onChange={e => setText(e.target.value)}
-              />
-            </div>
-            <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-              <GrEmoji style={{ fontSize: "20px" }} />
-              <CiFolderOn style={{ fontSize: "20px" }} />
-              <span
-                onClick={() => setClickDropdownTwo(!clickDropdowntwo)}
-                style={{ color: "grey", position: "relative" }}
-              >
-                <HiOutlineDotsVertical style={{ fontSize: "20px" }} />
-              </span>
-               {clickDropdowntwo && (
+        <div
+          style={{
+            width: "100%",
+            padding: "10px",
+            position: "absolute",
+            bottom: "5px",
+          }}
+        >
+          <form onSubmit={handleSubmit}>
+            <div
+              className="message-send-container"
+              style={{
+                backgroundColor: "#f7f7f7",
+                // width: "75.36vw",
+                border: "1px solid #e7e0e0",
+                borderRadius: "10px",
+                display: "flex",
+                justifyContent: "space-between",
+                padding: "10px 10px",
+                position: "relative",
+              }}
+            >
               <div
-                style={{
-                  position: "absolute",
-                  top: "-200px",
-                  right: "70px",
-                  zIndex: "100",
-                }}
+                style={{ display: "flex", gap: "8px", alignItems: "center" }}
               >
-                <SendFileModel/>
+                <MdOutlineKeyboardVoice style={{ fontSize: "25px" }} />
+                {/* <span >Type Your Message</span> */}
+                <input
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    backgroundColor: "#f7f7f7",
+                    color: "grey",
+                    fontSize: "13px",
+                    border: "none",
+                    outline: "none",
+                  }}
+                  type="text"
+                  placeholder="Type Your Message"
+                  value={msg}
+                  onChange={(e) => setText(e.target.value)}
+                />
               </div>
-            )}
-              <button type="submit"
-                style={{
-                  backgroundColor: "#fe9f43",
-                  color: "white",
-                  padding: "8px 15px",
-                  borderRadius: "10px",
-                }}
+              <div
+                style={{ display: "flex", gap: "12px", alignItems: "center" }}
               >
-                <BsSend />
-              </button>
+                <GrEmoji style={{ fontSize: "20px" }} />
+                <CiFolderOn style={{ fontSize: "20px" }} />
+                <span
+                  onClick={() => setClickDropdownTwo(!clickDropdowntwo)}
+                  style={{ color: "grey", position: "relative" }}
+                >
+                  <HiOutlineDotsVertical style={{ fontSize: "20px" }} />
+                </span>
+                {clickDropdowntwo && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "-200px",
+                      right: "70px",
+                      zIndex: "100",
+                    }}
+                  >
+                    <SendFileModel />
+                  </div>
+                )}
+                <button
+                  type="submit"
+                  style={{
+                    backgroundColor: "#fe9f43",
+                    color: "white",
+                    padding: "8px 15px",
+                    borderRadius: "10px",
+                  }}
+                >
+                  <BsSend />
+                </button>
+              </div>
             </div>
-          </div>
           </form>
         </div>
-
       </div>
     </div>
   );
