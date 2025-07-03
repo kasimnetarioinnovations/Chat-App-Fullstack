@@ -140,19 +140,39 @@ const handleSubmit = async (e) => {
   useEffect(() => {
   fetchChat();
 }, [person]);
-  useEffect(() => {
+//   useEffect(() => {
+//   const socket = io(import.meta.env.VITE_BACKEND_URL);
+
+//   socket.emit("user-connected", currentuser._id); // Send current user ID
+
+//  socket.on("update-user-status", (users) => {
+//   setOnlineUsers(users);
+// });
+
+//   return () => {
+//     socket.disconnect(); // Clean up
+//   };
+// }, []);
+useEffect(() => {
   const socket = io(import.meta.env.VITE_BACKEND_URL);
 
-  socket.emit("user-connected", currentuser._id); // Send current user ID
+  socket.emit("user-connected", currentuser._id);
 
- socket.on("update-user-status", (users) => {
-  setOnlineUsers(users);
-});
+  socket.on("update-user-status", (users) => {
+    setOnlineUsers(users);
+  });
+
+  // 👇 New: Listen for incoming messages
+  socket.on("receive-message", (newMessage) => {
+    setChat((prev) => [...prev, newMessage]);
+  });
 
   return () => {
-    socket.disconnect(); // Clean up
+    socket.disconnect();
   };
 }, []);
+
+
 const isUserOnline = (userId) => {
   return onlineUsers.includes(userId);
 };
