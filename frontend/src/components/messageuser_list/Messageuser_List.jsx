@@ -130,9 +130,8 @@ const isUserOnline = (userId) => {
                 position: "relative",
               }}
             >
-                {profileimage ? (
-                    
-              <img
+                {profileimage ? (  
+                <img
                   src={`${backendUrl}/uploads/${profileimage}`}
                   alt={user.name}
                   className=""
@@ -212,16 +211,20 @@ const isUserOnline = (userId) => {
                     marginRight: "10px",
                   }}
                 >
-                  <img
-                    src={message_user_logo}
-                    alt="message-user-logo"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      borderRadius: "50%",
-                    }}
-                  />
+
+                {profileimage ? (  
+                <img
+                  src={`${backendUrl}/uploads/${profileimage}`}
+                  alt={user.name}
+                  className=""
+                  style={{width:"100%", height:"100%", objectFit:"cover", borderRadius:"50%"}}
+                />
+                  ) : (
+                    <div className="user-initials" style={{width:"100%", height:"100%", objectFit:"cover", borderRadius:"50%"}}>
+                      {selectedUser.name.slice(0, 2).toUpperCase()}
+                    </div>
+                )}
+
                 </span>
               )}
               <div className="message-box">
