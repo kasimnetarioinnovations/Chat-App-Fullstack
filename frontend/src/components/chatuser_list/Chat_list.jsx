@@ -12,6 +12,8 @@ const Chat_list = ({ onUserSelect }) => {
 
   const [error, setError] = useState("");
   const [onlineUsers, setOnlineUsers] = useState([]);
+  const [lastMessages, setLastMessages] = useState({});
+  const [totalMessages, setTotalMessages] = useState({});
 
   const fetchUser = () => {
     fetch(`${backendurl}/user/list`)
@@ -25,7 +27,7 @@ const Chat_list = ({ onUserSelect }) => {
   };
   useEffect(() => {
     fetchUser();
-  });
+  }, []);
    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   useEffect(() => {
   const socket = io(import.meta.env.VITE_BACKEND_URL);
@@ -79,6 +81,33 @@ const isUserOnline = (userId) => {
   input.click();
 };
 
+useEffect(() => {
+  const fetchLastMessages = async () => {
+    const results = {};
+    const totals = {};
+    for (const u of filteredUsers) {
+      try {
+        const res = await fetch(`${backendurl}/chat/last-message`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ user: currentUser._id, person: u._id }),
+        });
+        const data = await res.json();
+        console.log('Last message for', u._id, data.lastMsg); // Debug API response
+        results[u._id] = data.lastMsg;
+        totals[u._id] = data.totalMsgs || 0;
+      } catch (err) {
+        results[u._id] = null;
+        totals[u._id] = 0;
+      }
+    }
+    setLastMessages(results);
+    setTotalMessages(totals);
+    console.log('All lastMessages:', results); // Debug state
+  };
+  if (filteredUsers && filteredUsers.length > 0) fetchLastMessages();
+  // eslint-disable-next-line
+}, [filteredUsers, currentUser._id]);
 
   return (
     <div className="chat-list-header">
@@ -123,44 +152,46 @@ const isUserOnline = (userId) => {
                     {users.name.slice(0, 2).toUpperCase()}
                   </div>
                 )}
-                
+                {/* Online/Offline dot */}
+                <span
+                  style={{
+                    position: "absolute",
+                    left: "30px",
+                    bottom: "0px",
+                    width: "12px",
+                    height: "12px",
+                    borderRadius: "50%",
+                    backgroundColor: isUserOnline(users._id) ? "green" : "grey",
+                    border: "2px solid white",
+                    zIndex: 2
+                  }}
+                ></span>
               </div>
-                <div
-              style={{
-                backgroundColor: "green",
-                borderRadius: "50%",
-                width: "7px",
-                height: "7x",
-                padding: "6px",
-                position: "absolute",
-                left: "30px",
-                bottom: "0px",
-                border: "2px solid white",
-                zIndex:"1px"
-              }}
-            ></div>
               <div>
                 <div>
                   <span className="txt0">
                     <b>{users.name}</b>
                   </span>
                 </div>
-                <div style={{ marginTop: "-8px" }}>
-                  <span className="txt">is typing ...</span>
+                <div style={{ marginTop: "-5px" }}>
+                  <span className="txt">
+                    {lastMessages[users._id]?.text || ""}
+                  </span>
                 </div>
               </div>
             </div>
 
             {/* timing */}
             <div className="chat-list-user-rightbox">
-              <span className="txt">02:35 AM</span>
-              <br />
               <span
                 className="txt"
                 style={{ display: "flex", justifyContent: "end" }}
               >
-                52
+                {lastMessages[users._id]?.timestamp
+                  ? new Date(lastMessages[users._id].timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                  : ""}
               </span>
+              <span style={{backgroundColor:'orange',borderRadius:'50%', color:'white', padding:'2px 5px'}}>{totalMessages[users._id] || 0}</span>
             </div>
           </div>
         ))}
