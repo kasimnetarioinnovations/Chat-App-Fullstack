@@ -36,6 +36,14 @@ function RegistrationForm() {
     alert("Server error: " + error.message);
   }
 };
+useEffect(() => {
+  socket.emit("user-connected", currentUser._id);
+
+  return () => {
+    socket.emit("user-disconnected", currentUser._id);
+  };
+}, []);
+
 
 
   const styles = {
