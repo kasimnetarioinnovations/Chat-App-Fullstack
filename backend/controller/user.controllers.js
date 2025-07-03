@@ -9,6 +9,16 @@ const listUser = async (req, res) => {
   }
 };
 
+const profile = async (req, res) => {
+  try {
+    const { id } = req.body;
+    const UserProfile = await UserModule.findOne({ _id: id });
+    res.status(200).json({ user: UserProfile });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to list users", error: error.message });
+  }
+};
+
 const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -48,5 +58,6 @@ const uploadImage = async (req, res) => {
 module.exports = {
   listUser,
   registerUser,
-   uploadImage
+   uploadImage,
+   profile
 };

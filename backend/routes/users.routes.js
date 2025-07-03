@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { listUser, registerUser,uploadImage } = require("../controller/user.controllers");
+const { listUser, registerUser,uploadImage, profile } = require("../controller/user.controllers");
 const multer = require("multer");
 const path = require("path");
 
@@ -19,6 +19,7 @@ const upload = multer({ storage });
 router.get("/list", listUser);
 router.post("/register", registerUser); //  new route
 router.post("/upload/:id", upload.single("image"), uploadImage);
+router.post("/profile", profile);
 
 
 module.exports = router;
