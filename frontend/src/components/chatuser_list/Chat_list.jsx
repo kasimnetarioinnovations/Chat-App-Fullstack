@@ -7,8 +7,6 @@ const Chat_list = ({ onUserSelect }) => {
   
   const backendurl = import.meta.env.VITE_BACKEND_URL;
 
-  const loginuser = "685a3cba84d4271061452262" // Aditya id
-
   const [user, setUser] = useState([]);
 
   const [error, setError] = useState('');

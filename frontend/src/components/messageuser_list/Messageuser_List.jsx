@@ -18,7 +18,9 @@ const Messageuser_List = ({ selectedUser }) => {
   
   const personname = selectedUser?.name;
 
-  const user = "685a3cba84d4271061452262" // Aditya id
+  const currentuser = JSON.parse(localStorage.getItem("currentUser"));
+  const user = currentuser._id;
+
   const person = selectedUser?._id;
 
   const [msg, setText] = useState('');
