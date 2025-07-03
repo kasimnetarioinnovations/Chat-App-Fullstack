@@ -87,20 +87,9 @@ const Messageuser_List = ({ selectedUser }) => {
   //     setMessage("Error : " + error.message);
   //   }
   // };
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
-
   if (!msg.trim()) return;
-
-  const newMessage = {
-    sender: user,
-    text: msg,
-    timestamp: new Date().toISOString(),
-  };
-
-  // Push to chat immediately (optimistic UI)
-  setChat((prev) => [...prev, newMessage]);
-  setText("");
 
   try {
     const res = await fetch(`${backendUrl}/chat/sendmsg`, {
@@ -115,13 +104,17 @@ const Messageuser_List = ({ selectedUser }) => {
 
     const data = await res.json();
 
-    if (!res.ok) {
-      setMessage("Server Response : " + data.error || "Error");
+    if (res.ok) {
+      setText("");         // clear input
+      fetchChat();         // reload messages from backend after send
+    } else {
+      setError("Server Response: " + (data.error || "Error"));
     }
   } catch (error) {
-    setMessage("Error : " + error.message);
+    setError("Error: " + error.message);
   }
 };
+
 
 
   //call server to list products
