@@ -2,7 +2,13 @@ const mongoose = require('mongoose');
 
 const ChatSchema = new mongoose.Schema({
     participants: [String],
-    msg: [String],
+    msg: [
+        {
+            text: String,
+            sender: String,
+            timestamp: { type: Date, default: Date.now }
+        }
+    ],
     createdAt: {
         type: Date,
         default: Date.now
