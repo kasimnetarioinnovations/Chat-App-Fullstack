@@ -101,71 +101,68 @@ const isUserOnline = (userId) => {
         {error && <p>{error}</p>}
 
         {filteredUsers.map((users) => (
-          <>
-            {/* user list */}
-            <div
-              className="chat-list-user"
-              key={users._id}
-              onClick={() => onUserSelect(users)}
-            >
-              {/* image name text*/}
-              <div className="chat-list-user-leftbox  position-relative">
-                <div
-                  className="chat-list-user-image-box"
-                  onClick={() => handleImageClick(users._id)}
-                >
-                  {users.image ? (
-                    <img
-                      src={`${backendurl}/uploads/${users.image}`}
-                      alt={users.name}
-                      className="chat-list-user-image"
-                    />
-                  ) : (
-                    <div className="user-initials">
-                      {users.name.slice(0, 2).toUpperCase()}
-                    </div>
-                  )}
-                  
-                </div>
-                  <div
-                style={{
-                  backgroundColor: "green",
-                  borderRadius: "50%",
-                  width: "7px",
-                  height: "7x",
-                  padding: "6px",
-                  position: "absolute",
-                  left: "30px",
-                  bottom: "0px",
-                  border: "2px solid white",
-                  zIndex:"1px"
-                }}
-              ></div>
-                <div>
-                  <div>
-                    <span className="txt0">
-                      <b>{users.name}</b>
-                    </span>
+          <div
+            className="chat-list-user"
+            key={users._id}
+            onClick={() => onUserSelect(users)}
+          >
+            {/* image name text*/}
+            <div className="chat-list-user-leftbox  position-relative">
+              <div
+                className="chat-list-user-image-box"
+                onClick={() => handleImageClick(users._id)}
+              >
+                {users.image ? (
+                  <img
+                    src={`${backendurl}/uploads/${users.image}`}
+                    alt={users.name}
+                    className="chat-list-user-image"
+                  />
+                ) : (
+                  <div className="user-initials">
+                    {users.name.slice(0, 2).toUpperCase()}
                   </div>
-                  <div style={{ marginTop: "-8px" }}>
-                    <span className="txt">is typing ...</span>
-                  </div>
-                </div>
+                )}
+                
               </div>
-
-              {/* timing */}
-              <div className="chat-list-user-rightbox">
-                <span className="txt">02:35 AM</span>
-                <br />
-                <span
-                  className="txt"
-                  style={{ display: "flex", justifyContent: "end" }}
-                >
-                  52
-                </span>
+                <div
+              style={{
+                backgroundColor: "green",
+                borderRadius: "50%",
+                width: "7px",
+                height: "7x",
+                padding: "6px",
+                position: "absolute",
+                left: "30px",
+                bottom: "0px",
+                border: "2px solid white",
+                zIndex:"1px"
+              }}
+            ></div>
+              <div>
+                <div>
+                  <span className="txt0">
+                    <b>{users.name}</b>
+                  </span>
+                </div>
+                <div style={{ marginTop: "-8px" }}>
+                  <span className="txt">is typing ...</span>
+                </div>
               </div>
             </div>
-          </>
+
+            {/* timing */}
+            <div className="chat-list-user-rightbox">
+              <span className="txt">02:35 AM</span>
+              <br />
+              <span
+                className="txt"
+                style={{ display: "flex", justifyContent: "end" }}
+              >
+                52
+              </span>
+            </div>
+          </div>
         ))}
       </div>
     </div>
