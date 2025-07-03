@@ -56,7 +56,6 @@ const Messageuser_List = ({ selectedUser }) => {
   }, [currentuser]);
 
   const [msg, setText] = useState("");
-  const [message, setMessage] = useState("");
 
   const [chat, setChat] = useState([]);
 
@@ -137,7 +136,7 @@ const Messageuser_List = ({ selectedUser }) => {
         setChat(data.messages);
       })
       .catch((error) => {
-        setMessage("Server Response : " + error.message);
+        setError("Server Response : " + error.message);
       });
   };
 
@@ -348,7 +347,6 @@ const isUserOnline = (userId) => {
           </div>
 
           {error && <p style={{ textAlign: "center" }}>{error}</p>}
-          {message && <p style={{ textAlign: "center" }}>{message}</p>}
         </div>
 
         <div
