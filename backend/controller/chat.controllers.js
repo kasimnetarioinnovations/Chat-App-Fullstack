@@ -47,9 +47,26 @@ const listMessage = async (req, res) => {
     }
 }
 
+const getLastMessage = async (req, res) => {
+  try {
+    const { user, person } = req.body;
+    const participants = [user, person].sort();
+    const chat = await ChatSchema.findOne({ participants });
+    if (chat && chat.msg.length > 0) {
+      const lastMsg = chat.msg[chat.msg.length - 1];
+      res.json({ lastMsg, totalMsgs: chat.msg.length });
+    } else {
+      res.json({ lastMsg: null, totalMsgs: 0 });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch last message", error: error.message });
+  }
+};
+
 const ChatController = {
     sendMessage,
-    listMessage
+    listMessage,
+    getLastMessage
 };
 
 module.exports = ChatController;

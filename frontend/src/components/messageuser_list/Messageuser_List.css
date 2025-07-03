@@ -30,7 +30,7 @@ you-message-conatiner {
 }
 
 .message-box {
-  max-width: 60%;
+  max-width: auto;
   padding: 10px 16px;
   border-radius: 16px;
   font-size: 15px;

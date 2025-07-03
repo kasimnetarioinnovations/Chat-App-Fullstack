@@ -65,7 +65,7 @@ const Messageuser_List = ({ selectedUser }) => {
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
   //   try {
-  //     const res = await fetch(`${backendUrl}/chat/sendmsg`, {
+  //     const res = await fetch(${backendUrl}/chat/sendmsg, {
   //       method: "POST",
   //       headers: { "Content-Type": "application/json" },
   //       body: JSON.stringify({
