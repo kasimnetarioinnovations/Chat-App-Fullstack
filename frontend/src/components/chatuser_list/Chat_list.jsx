@@ -18,6 +18,12 @@ const Chat_list = ({ onUserSelect }) => {
   };
   useEffect(() => { fetchUser(); });
 
+  
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+  // ✅ Filter logic to hide current user on this system only
+  const filteredUsers = user.filter(u => u._id !== currentUser?._id)
+
   return (
     <div className='chat-list-header'>
 
@@ -36,7 +42,7 @@ const Chat_list = ({ onUserSelect }) => {
       <div className='chat-list-usersection'>
       {error && <p>{error}</p>}
 
-      {user.map(users => (
+      {filteredUsers.map(users => (
       <>
       {/* user list */}
       <div className='chat-list-user' key={users._id}  onClick={() => onUserSelect(users)}>
