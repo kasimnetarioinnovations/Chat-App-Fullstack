@@ -65,7 +65,7 @@ const Messageuser_List = ({ selectedUser }) => {
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
   //   try {
-  //     const res = await fetch(`${backendUrl}/chat/sendmsg`, {
+  //     const res = await fetch(${backendUrl}/chat/sendmsg, {
   //       method: "POST",
   //       headers: { "Content-Type": "application/json" },
   //       body: JSON.stringify({
@@ -207,23 +207,23 @@ const isUserOnline = (userId) => {
                     </div>
                   )}
 
-              {/* Online/Offline dot */}
-              <span
+              <div
                 style={{
+                  backgroundColor: isUserOnline(selectedUser._id) ? "green" : "grey",
+                  borderRadius: "50%",
+                  width: "7px",
+                  height: "7x",
+                  padding: "6px",
                   position: "absolute",
                   right: "0px",
                   bottom: "0px",
-                  width: "12px",
-                  height: "12px",
-                  borderRadius: "50%",
-                  backgroundColor: isUserOnline(selectedUser._id) ? "green" : "grey",
                   border: "2px solid white",
-                  zIndex: 2
                 }}
-              ></span>
+              ></div>
             </div>
             <div>
               <strong>{personname}</strong>
+              <p style={{ marginBottom: "0", color: "grey" }}>{isUserOnline(selectedUser._id) ? "Online" : "Offline"}</p>
             </div>
           </div>
 
@@ -266,7 +266,6 @@ const isUserOnline = (userId) => {
                 marginBottom: "10px",
               }}
             >
-              
               {msg.sender !== user && (
                 <span
                   style={{
@@ -276,8 +275,7 @@ const isUserOnline = (userId) => {
                     marginRight: "10px",
                   }}
                 >
-                
-                
+
                 {profileimage ? (  
                 <img
                   src={`${backendUrl}/uploads/${profileimage}`}
@@ -293,26 +291,15 @@ const isUserOnline = (userId) => {
 
                 </span>
               )}
-
-              <div>
               <div className="message-box">
                 <p className="mb-0">{msg.text}</p>
               </div>
-              <div
-                style={{
-                  fontSize: "11px",
-                  color: "#888",
-                  marginTop: "4px",
-                  textAlign: msg.sender === user ? 'right' : 'left',
-                }}
-              >
+              
+                <div style={{ fontSize: "11px", color: "#888", marginTop: "4px" }}>
                   {msg.timestamp && new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   {" · "}
                   {msg.sender === user ? "You" : selectedUser?.name}
-              </div>
-              </div>
-              
-                
+                </div>
                 
               {msg.sender === user && (
                 <span
@@ -342,7 +329,7 @@ const isUserOnline = (userId) => {
             </div>
           ))}
 
-          {/* <div className="message-date d-flex justify-content-center align-items-center">
+          <div className="message-date d-flex justify-content-center align-items-center">
             <hr style={{ width: "100% " }} />
             <div
               style={{
@@ -357,7 +344,7 @@ const isUserOnline = (userId) => {
               Today, July 02
             </div>
             <hr style={{ width: "100% " }} />
-          </div> */}
+          </div>
 
           {error && <p style={{ textAlign: "center" }}>{error}</p>}
         </div>
@@ -403,7 +390,6 @@ const isUserOnline = (userId) => {
                   placeholder="Type Your Message"
                   value={msg}
                   onChange={(e) => setText(e.target.value)}
-                  required
                 />
               </div>
               <div
@@ -445,7 +431,6 @@ const isUserOnline = (userId) => {
             </div>
           </form>
         </div>
-        
       </div>
     </div>
   );
