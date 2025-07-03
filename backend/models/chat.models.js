@@ -1,20 +1,16 @@
 const mongoose = require('mongoose');
 
-const ChatSchema = mongoose.Schema({
-    user: {
-        type: mongoose.Schema.Types.String,
-        required: true
+const ChatSchema = new mongoose.Schema({
+    participants: [String],
+    msg: [String],
+    createdAt: {
+        type: Date,
+        default: Date.now
     },
-    person: {
-        type: mongoose.Schema.Types.String,
-        required: true
-    },
-    msg: {
-        type: [String],
-        required: true
+    updatedAt: {
+        type: Date,
+        default: Date.now
     }
-},{
-    timestamps: true
 });
 
 module.exports = mongoose.model('Chats', ChatSchema);

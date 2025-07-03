@@ -7,17 +7,20 @@ const sendMessage = async (req, res) => {
         return res.status(400).json({ error: "user, person, and msg are required" });
     }
 
-    let chat = await ChatSchema.findOne({ user, person });
+    const participants = [user, person].sort();
+    let chat = await ChatSchema.findOne({ participants });
 
     if (chat) {
         chat.msg.push(...(Array.isArray(msg) ? msg : [msg]));
+        chat.updatedAt = new Date();
         await chat.save();
         return res.status(200).json({ message: chat });
     } else {
         const createChat = await ChatSchema.create({
-            user,
-            person,
-            msg: Array.isArray(msg) ? msg : [msg]
+            participants,
+            msg: Array.isArray(msg) ? msg : [msg],
+            createdAt: new Date(),
+            updatedAt: new Date()
         });
         return res.status(200).json({
             message: "message send",
@@ -29,7 +32,8 @@ const sendMessage = async (req, res) => {
 const listMessage = async (req, res) => {
     try{
         const { user, person } = req.body;
-        let chat = await ChatSchema.findOne({ user, person });
+        const participants = [user, person].sort();
+        let chat = await ChatSchema.findOne({ participants });
         res.status(200).json({ messages: chat ? chat.msg : [] });
     } catch(error) {
         console.log("Error while fetching messages ", error);
