@@ -10,6 +10,7 @@
 }
 .message-chat-box{
     overflow-y: auto;
+    height: calc(100vh - 30vh);
 }
 .message-chat-box::-webkit-scrollbar{
     display: none;
