@@ -10,10 +10,13 @@ import { GrEmoji } from "react-icons/gr";
 import { CiFolderOn } from "react-icons/ci";
 import { BsSend } from "react-icons/bs";
 import SendFileModel from "./SendFileModel";
+import { io } from "socket.io-client";
+
 
 const Messageuser_List = ({ selectedUser }) => {
   const [clickDropdown, setClickDropdown] = useState();
   const [clickDropdowntwo, setClickDropdownTwo] = useState();
+  const [onlineUsers, setOnlineUsers] = useState([]);
 
   const person = selectedUser?._id;
   const personname = selectedUser?.name;
@@ -58,6 +61,7 @@ const Messageuser_List = ({ selectedUser }) => {
   const [chat, setChat] = useState([]);
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  // const socket = io(import.meta.env.VITE_BACKEND_URL);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -105,6 +109,23 @@ const Messageuser_List = ({ selectedUser }) => {
   useEffect(() => {
     fetchChat();
   });
+  useEffect(() => {
+  const socket = io(import.meta.env.VITE_BACKEND_URL);
+
+  socket.emit("user-connected", currentuser._id); // Send current user ID
+
+  socket.on("getOnlineUsers", (users) => {
+    setOnlineUsers(users);
+  });
+
+  return () => {
+    socket.disconnect(); // Clean up
+  };
+}, []);
+const isUserOnline = (userId) => {
+  return onlineUsers.includes(userId);
+};
+
 
   return (
     <div className="w-100">
@@ -150,7 +171,7 @@ const Messageuser_List = ({ selectedUser }) => {
 
               <div
                 style={{
-                  backgroundColor: "green",
+                  backgroundColor: isUserOnline(selectedUser._id) ? "green" : "grey",
                   borderRadius: "50%",
                   width: "7px",
                   height: "7x",
@@ -164,7 +185,7 @@ const Messageuser_List = ({ selectedUser }) => {
             </div>
             <div>
               <strong>{personname}</strong>
-              <p style={{ marginBottom: "0", color: "grey" }}>Online</p>
+              <p style={{ marginBottom: "0", color: "grey" }}>{isUserOnline(selectedUser._id) ? "Online" : "Offline"}</p>
             </div>
           </div>
 
@@ -364,6 +385,7 @@ const Messageuser_List = ({ selectedUser }) => {
                     color: "white",
                     padding: "8px 15px",
                     borderRadius: "10px",
+                    border:"none"
                   }}
                 >
                   <BsSend />

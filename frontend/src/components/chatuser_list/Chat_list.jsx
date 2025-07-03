@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./Chat_list.css";
 import { CiSearch } from "react-icons/ci";
+import messageuserlogo from "../../assets/image/user-image.jpg";
+import { io } from "socket.io-client";
 
 const Chat_list = ({ onUserSelect }) => {
   const backendurl = import.meta.env.VITE_BACKEND_URL;
+  // const socket = io(import.meta.env.VITE_BACKEND_URL);
 
   const [user, setUser] = useState([]);
 
   const [error, setError] = useState("");
+  const [onlineUsers, setOnlineUsers] = useState([]);
 
   const fetchUser = () => {
     fetch(`${backendurl}/user/list`)
@@ -22,8 +26,27 @@ const Chat_list = ({ onUserSelect }) => {
   useEffect(() => {
     fetchUser();
   });
+   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  useEffect(() => {
+  const socket = io(import.meta.env.VITE_BACKEND_URL);
 
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  socket.emit("user-connected", currentUser._id); // Send current user ID
+
+  socket.on("getOnlineUsers", (users) => {
+    setOnlineUsers(users);
+  });
+
+  return () => {
+    socket.disconnect(); // Clean up
+  };
+}, []);
+const isUserOnline = (userId) => {
+  return onlineUsers.includes(userId);
+};
+
+
+
+ 
 
   // ✅ Filter logic to hide current user on this system only
   const filteredUsers = user.filter((u) => u._id !== currentUser?._id);
@@ -86,7 +109,7 @@ const Chat_list = ({ onUserSelect }) => {
               onClick={() => onUserSelect(users)}
             >
               {/* image name text*/}
-              <div className="chat-list-user-leftbox">
+              <div className="chat-list-user-leftbox  position-relative">
                 <div
                   className="chat-list-user-image-box"
                   onClick={() => handleImageClick(users._id)}
@@ -102,8 +125,22 @@ const Chat_list = ({ onUserSelect }) => {
                       {users.name.slice(0, 2).toUpperCase()}
                     </div>
                   )}
+                  
                 </div>
-
+                  <div
+                style={{
+                  backgroundColor: "green",
+                  borderRadius: "50%",
+                  width: "7px",
+                  height: "7x",
+                  padding: "6px",
+                  position: "absolute",
+                  left: "30px",
+                  bottom: "0px",
+                  border: "2px solid white",
+                  zIndex:"1px"
+                }}
+              ></div>
                 <div>
                   <div>
                     <span className="txt0">
