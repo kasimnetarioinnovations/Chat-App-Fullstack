@@ -26,7 +26,7 @@ const Messageuser_List = ({ selectedUser }) => {
         className="message-container"
         style={{
           backgroundColor: "white",
-          height: "800px",
+          height: "85vh",
           position: "relative",
         }}
       >

@@ -1,23 +1,30 @@
 const ChatSchema = require('../models/chat.models');
 
 const listMessage = async (req, res) => {
-    const user = req.body.userId;
-    const person = req.body.personId;
+    const { user, person, msg } = req.body;
 
-    const checkUserChat = await ChatSchema.findOne({ userId: user});
+    if (!user || !person || !msg) {
+        return res.status(400).json({ error: "user, person, and msg are required" });
+    }
 
-    if(checkUserChat){
-        const { msg } = req.body;
-        const chat = await ChatSchema.findByIdAndUpdate(req.params.userId, {msg}, {new: true, runValidators: true});
-        res.json({ message: chat });
+    let chat = await ChatSchema.findOne({ user, person });
+
+    if (chat) {
+        chat.msg.push(...(Array.isArray(msg) ? msg : [msg]));
+        await chat.save();
+        return res.json({ message: chat });
     } else {
-        const createChat = await ChatSchema.create(req.body)
-        res.json({
-            message: "working",
+        const createChat = await ChatSchema.create({
+            user,
+            person,
+            msg: Array.isArray(msg) ? msg : [msg]
+        });
+        return res.json({
+            message: "message send",
             data: createChat
         });
     }
-}
+};
 
 const ChatController = {
     listMessage
