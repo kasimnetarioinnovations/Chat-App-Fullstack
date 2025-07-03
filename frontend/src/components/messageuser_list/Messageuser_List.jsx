@@ -160,109 +160,72 @@ const Messageuser_List = ({ selectedUser }) => {
 
         <div className="message-chat-box" style={{ padding: "20px 90px",}}>
           
-          {Array.isArray(chat) && chat.map((msgs, index) => (
-          <div className="you-message-conatiner d-flex justify-content-end  position-relative" key={index}>
+          {Array.isArray(chat) && chat.map((msg, index) => (
             <div
-              className="message-box"
+              className={
+                msg.sender === user
+                  ? "you-message-conatiner d-flex justify-content-end position-relative"
+                  : "other-message-conatiner d-flex justify-content-start position-relative"
+              }
+              key={index}
               style={{
-                backgroundColor: "#f3f2f2",
-                width: "500px",
-                borderRadius: "5px",
-                padding: "5px 12px",
+                marginBottom: "10px",
               }}
             >
-              <p className="mb-0">
-                {msgs}
-              </p>
-            </div>
-            <div
-              style={{
-                position: "absolute",
-                top: "50px",
-                right: "-70px",
-                display: "flex",
-                alignItems: "end",
-                gap: "8px",
-              }}
-            >
-              <span style={{ color: "grey" }}>
-                <IoCheckmarkDone style={{ color: "green" }} /> 08:00 AM
-                <GoDotFill style={{ color: "#e3e0e0" }} />
-                <span style={{ color: "black" }}>You</span>
-              </span>
-              <span className="d-flex gap-3">
-                {" "}
+              {msg.sender !== user && (
                 <span
-                  style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    borderRadius: "50%",
+                    marginRight: "10px",
+                  }}
                 >
                   <img
                     src={message_user_logo}
                     alt="message-user-logo"
                     style={{
-                      width: "50px",
-                      height: "50px",
+                      width: "100%",
+                      height: "100%",
                       objectFit: "cover",
                       borderRadius: "50%",
                     }}
                   />
                 </span>
-              </span>
+              )}
+              <div className="message-box">
+                <p className="mb-0">{msg.text}</p>
+              </div>
+              
+                <div style={{ fontSize: "11px", color: "#888", marginTop: "4px" }}>
+                  {msg.timestamp && new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  {" · "}
+                  {msg.sender === user ? "You" : selectedUser?.name}
+                </div>
+                
+              {msg.sender === user && (
+                <span
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    borderRadius: "50%",
+                    marginLeft: "10px",
+                  }}
+                >
+                  <img
+                    src={message_user_logo}
+                    alt="message-user-logo"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      borderRadius: "50%",
+                    }}
+                  />
+                </span>
+              )}
             </div>
-          </div>
           ))}
-
-          <div className="other-message-conatiner py-5  position-relative">
-            <div
-              className="message-box"
-              style={{
-                backgroundColor: "#f3f2f2",
-                width: "500px",
-                borderRadius: "5px",
-                padding: "5px 12px",
-              }}
-            >
-              <p className="mb-0">
-                Hi, Mark, good to hear from you! Your delivery is schedule for
-                Friday at 10:00 AM. Is that time still convenient for you?
-              </p>
-            </div>
-            <div
-              style={{
-                position: "absolute",
-                top: "100px",
-                left: "-70px",
-                display: "flex",
-                alignItems: "end",
-                gap: "8px",
-              }}
-            >
-              <span>
-                {" "}
-                <span
-                  style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-                >
-                  <img
-                    src={message_user_logo}
-                    alt="message-user-logo"
-                    style={{
-                      width: "50px",
-                      height: "50px",
-                      objectFit: "cover",
-                      borderRadius: "50%",
-                      paddingLeft: "3px",
-                    }}
-                  />
-                </span>
-              </span>
-
-              <span style={{ color: "grey" }}>
-                <span style={{ color: "black" }}>{selectedUser?.name}</span>
-                <GoDotFill style={{ color: "#e3e0e0" }} />
-                08:00 AM
-                <IoCheckmarkDone style={{ color: "green" }} />
-              </span>
-            </div>
-          </div>
 
           <div className="message-date d-flex justify-content-center align-items-center">
             <hr style={{ width: "100% " }} />

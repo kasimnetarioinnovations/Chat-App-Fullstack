@@ -10,15 +10,21 @@ const sendMessage = async (req, res) => {
     const participants = [user, person].sort();
     let chat = await ChatSchema.findOne({ participants });
 
+    const messageObj = {
+        text: Array.isArray(msg) ? msg[0] : msg,
+        sender: user,
+        timestamp: new Date()
+    };
+
     if (chat) {
-        chat.msg.push(...(Array.isArray(msg) ? msg : [msg]));
+        chat.msg.push(messageObj);
         chat.updatedAt = new Date();
         await chat.save();
         return res.status(200).json({ message: chat });
     } else {
         const createChat = await ChatSchema.create({
             participants,
-            msg: Array.isArray(msg) ? msg : [msg],
+            msg: [messageObj],
             createdAt: new Date(),
             updatedAt: new Date()
         });
