@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Messageuser_List.css";
 import message_user_logo from "../../assets/image/user-image.jpg";
 import { IoIosSearch } from "react-icons/io";
@@ -16,12 +16,64 @@ const Messageuser_List = ({ selectedUser }) => {
   const [clickDropdown, setClickDropdown] = useState();
   const [clickDropdowntwo, setClickDropdownTwo] = useState();
   
-  const loginuser = "685a3cba84d4271061452262"
-  const selectedperson = selectedUser?._id;
-
-
-  
   const personname = selectedUser?.name;
+
+  const currentuser = JSON.parse(localStorage.getItem("currentUser"));
+  const user = currentuser._id;
+
+  const person = selectedUser?._id;
+
+  const [msg, setText] = useState('');
+  const [message, setMessage] = useState('');
+
+  const [chat, setChat] = useState([]);
+
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+  const handleSubmit = async(e) => {
+        e.preventDefault();
+        try{
+            const res = await fetch(`${backendUrl}/chat/sendmsg`, {
+                method: 'POST',
+                headers: { 'Content-Type' : 'application/json' },
+                body: JSON.stringify({
+                  user,
+                  person,
+                  msg: Array.isArray(msg) ? msg : [msg] // Ensure text is an array
+                })
+            });
+
+            const data = await res.json();
+
+            if(res.ok){
+                setMessage('Message Send');
+                setText('');
+            } else {
+                setMessage('Server Response : ' + data.error || 'Error');
+            }
+
+        } catch(error) {
+            setMessage('Error : ' + error.message);
+        }
+    }
+
+  //call server to list products
+  const fetchChat = () => {
+    fetch(`${backendUrl}/chat/messages`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user, person })
+    })
+    .then(res => res.json())
+    .then(data => { setChat(data.messages); })
+    .catch(error => { setMessage('Server Response : ' + error.message); });
+  };
+
+  //to fetch list of products
+  useEffect(() => {
+    fetchChat();
+  });
+
   return (
     <div className="w-100">
       <div
@@ -107,7 +159,9 @@ const Messageuser_List = ({ selectedUser }) => {
         </div>
 
         <div className="message-chat-box" style={{ padding: "20px 90px",}}>
-          <div className="you-message-conatiner d-flex justify-content-end  position-relative">
+          
+          {Array.isArray(chat) && chat.map((msgs, index) => (
+          <div className="you-message-conatiner d-flex justify-content-end  position-relative" key={index}>
             <div
               className="message-box"
               style={{
@@ -118,8 +172,7 @@ const Messageuser_List = ({ selectedUser }) => {
               }}
             >
               <p className="mb-0">
-                Hi, this is Mark from freshmart. I'm reaching out to confirm
-                this week's delivery schedule.
+                {msgs}
               </p>
             </div>
             <div
@@ -156,6 +209,7 @@ const Messageuser_List = ({ selectedUser }) => {
               </span>
             </div>
           </div>
+          ))}
 
           <div className="other-message-conatiner py-5  position-relative">
             <div
@@ -226,8 +280,13 @@ const Messageuser_List = ({ selectedUser }) => {
             </div>
             <hr style={{ width: "100% " }} />
           </div>
+
+          {message && <p style={{textAlign:'center'}}>{message}</p>}
+
         </div>
+
         <div style={{ width:"100%", padding: "10px", position: "absolute", bottom: "5px" }}>
+        <form onSubmit={handleSubmit}>
           <div
             className="message-send-container"
             style={{
@@ -241,6 +300,7 @@ const Messageuser_List = ({ selectedUser }) => {
               position:"relative"
             }}
           >
+          
             <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
               <MdOutlineKeyboardVoice style={{ fontSize: "25px" }} />
               {/* <span >Type Your Message</span> */}
@@ -256,6 +316,8 @@ const Messageuser_List = ({ selectedUser }) => {
                 }}
                 type="text"
                 placeholder="Type Your Message"
+                value={msg}
+                onChange={e => setText(e.target.value)}
               />
             </div>
             <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
@@ -279,7 +341,7 @@ const Messageuser_List = ({ selectedUser }) => {
                 <SendFileModel/>
               </div>
             )}
-              <span
+              <button type="submit"
                 style={{
                   backgroundColor: "#fe9f43",
                   color: "white",
@@ -288,10 +350,12 @@ const Messageuser_List = ({ selectedUser }) => {
                 }}
               >
                 <BsSend />
-              </span>
+              </button>
             </div>
           </div>
+          </form>
         </div>
+
       </div>
     </div>
   );
