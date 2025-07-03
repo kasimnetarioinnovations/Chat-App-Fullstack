@@ -17,7 +17,7 @@ const ChatPage = () => {
             <p style={{color:"#a7acb2"}}>Manage your chats</p>
           </div>
           <div className="d-flex gap-2">
-            <span style={{backgroundColor:"white", padding:"6px 10px", borderRadius:"5px", border:"1px solid rgb(227 221 221)"}}><SlRefresh /></span>
+            <span onClick={() => window.location.reload()} style={{backgroundColor:"white", padding:"6px 10px", borderRadius:"5px", border:"1px solid rgb(227 221 221)", cursor:"pointer"}}><SlRefresh /></span>
             <span style={{backgroundColor:"white", padding:"6px 10px", borderRadius:"5px", border:"1px solid rgb(227 221 221)"}}><RiArrowDropUpLine /></span>
           </div>
         </div>
