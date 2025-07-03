@@ -27,6 +27,7 @@ function RegistrationForm() {
 
     if (response.ok) {
         localStorage.setItem("currentUser", JSON.stringify(result.user));
+          window.location.href = "/chat";
       alert("User registered successfully");
       setFormData({ name: '', email: '', password: '' });
     } else {
