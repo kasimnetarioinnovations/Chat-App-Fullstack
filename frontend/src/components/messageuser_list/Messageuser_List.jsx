@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import "./Messageuser_List.css";
 import { IoIosSearch } from "react-icons/io";
 import { HiOutlineDotsVertical } from "react-icons/hi";
@@ -17,6 +17,7 @@ const Messageuser_List = ({ selectedUser }) => {
   const [clickDropdown, setClickDropdown] = useState();
   const [clickDropdowntwo, setClickDropdownTwo] = useState();
   const [onlineUsers, setOnlineUsers] = useState([]);
+  const socketRef = useRef(null);
 
   const person = selectedUser?._id;
   const personname = selectedUser?.name;
@@ -98,7 +99,8 @@ const handleSubmit = async (e) => {
       body: JSON.stringify({
         user,
         person,
-        msg: [msg],
+        // msg: [msg],
+        msg,
       }),
     });
 
@@ -113,6 +115,17 @@ const handleSubmit = async (e) => {
   } catch (error) {
     setError("Error: " + error.message);
   }
+  if (res.ok) {
+  setText("");
+  fetchChat();
+
+  // 👇 Emit new message to others
+  socketRef.current.emit("send-message", {
+    senderId: user,
+    receiverId: person,
+    msg,
+  });
+}
 };
 
 
@@ -153,25 +166,41 @@ const handleSubmit = async (e) => {
 //     socket.disconnect(); // Clean up
 //   };
 // }, []);
+// useEffect(() => {
+//   const socket = io(import.meta.env.VITE_BACKEND_URL);
+
+//   socket.emit("user-connected", currentuser._id);
+
+//   socket.on("update-user-status", (users) => {
+//     setOnlineUsers(users);
+//   });
+
+//   // 👇 New: Listen for incoming messages
+//   socket.on("receive-message", (newMessage) => {
+//     setChat((prev) => [...prev, newMessage]);
+//   });
+
+//   return () => {
+//     socket.disconnect();
+//   };
+// }, []);
+
 useEffect(() => {
-  const socket = io(import.meta.env.VITE_BACKEND_URL);
+  socketRef.current = io(import.meta.env.VITE_BACKEND_URL);
+  socketRef.current.emit("user-connected", currentuser._id);
 
-  socket.emit("user-connected", currentuser._id);
-
-  socket.on("update-user-status", (users) => {
+  socketRef.current.on("update-user-status", (users) => {
     setOnlineUsers(users);
   });
 
-  // 👇 New: Listen for incoming messages
-  socket.on("receive-message", (newMessage) => {
+  socketRef.current.on("receive-message", (newMessage) => {
     setChat((prev) => [...prev, newMessage]);
   });
 
   return () => {
-    socket.disconnect();
+    socketRef.current.disconnect();
   };
 }, []);
-
 
 const isUserOnline = (userId) => {
   return onlineUsers.includes(userId);

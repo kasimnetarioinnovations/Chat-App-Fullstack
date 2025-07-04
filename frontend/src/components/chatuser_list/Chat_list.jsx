@@ -4,7 +4,6 @@
 // import messageuserlogo from "../../assets/image/user-image.jpg";
 // import { io } from "socket.io-client";
 
-
 // const Chat_list = ({ onUserSelect }) => {
 //   const backendurl = import.meta.env.VITE_BACKEND_URL;
 //   // const socket = io(import.meta.env.VITE_BACKEND_URL);
@@ -35,7 +34,6 @@
 //   }
 // }, []);
 
-
 //    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 //   useEffect(() => {
 //   const socket = io(import.meta.env.VITE_BACKEND_URL);
@@ -53,10 +51,6 @@
 // const isUserOnline = (userId) => {
 //   return onlineUsers.includes(userId);
 // };
-
-
-
- 
 
 //   // ✅ Filter logic to hide current user on this system only
 //   const filteredUsers = user.filter((u) => u._id !== currentUser?._id);
@@ -95,7 +89,7 @@
 //     headers: { "Content-Type": "application/json" },
 //     body: JSON.stringify({ userId: currentUser._id }),
 //   })
-  
+
 //     .then((res) => res.json())
 //     .then((data) => {
 //       setLastMessages(data);
@@ -156,7 +150,7 @@
 //                     {users.name.slice(0, 2).toUpperCase()}
 //                   </div>
 //                 )}
-                
+
 //               </div>
 //                 <div
 //               style={{
@@ -203,7 +197,6 @@
 // };
 
 // export default Chat_list;
-
 
 import React, { useEffect, useState } from "react";
 import "./Chat_list.css";
@@ -255,12 +248,26 @@ const Chat_list = ({ onUserSelect }) => {
   }, [currentUser]);
 
   // ✅ Set up socket for user presence
+  // useEffect(() => {
+  //   if (!currentUser?._id) return;
+
+  //   const socket = io(backendurl);
+  //   socket.emit("user-connected", currentUser._id);
+  //   socket.on("update-user-status", (users) => setOnlineUsers(users));
+
+  //   return () => socket.disconnect();
+  // }, [currentUser]);
   useEffect(() => {
     if (!currentUser?._id) return;
 
     const socket = io(backendurl);
     socket.emit("user-connected", currentUser._id);
     socket.on("update-user-status", (users) => setOnlineUsers(users));
+
+    // 👇 Add this to listen for new messages and update the last message list
+    socket.on("receive-message", () => {
+      fetchLastMessages(); // Refresh the last messages
+    });
 
     return () => socket.disconnect();
   }, [currentUser]);
@@ -320,7 +327,6 @@ const Chat_list = ({ onUserSelect }) => {
 
       {/* users */}
       <div className="chat-list-usersection">
-
         {error && <p>{error}</p>}
 
         {filteredUsers.map((u) => {
@@ -338,7 +344,12 @@ const Chat_list = ({ onUserSelect }) => {
                 >
                   {u.image ? (
                     <img
-                      src={`${backendurl}/uploads/${u.image}`}
+                      // src={`${backendurl}/uploads/${u.image}`}
+                      // alt={u.name}
+                      // className="chat-list-user-image"
+                      src={`${backendurl}/uploads/${
+                        u.image
+                      }?timestamp=${Date.now()}`}
                       alt={u.name}
                       className="chat-list-user-image"
                     />
@@ -350,9 +361,7 @@ const Chat_list = ({ onUserSelect }) => {
                 </div>
                 <div
                   style={{
-                    backgroundColor: isUserOnline(u._id)
-                      ? "green"
-                      : "gray",
+                    backgroundColor: isUserOnline(u._id) ? "green" : "gray",
                     borderRadius: "50%",
                     width: "7px",
                     height: "7px",
@@ -373,7 +382,8 @@ const Chat_list = ({ onUserSelect }) => {
                   <div style={{ marginTop: "-8px" }}>
                     <span className="txt">
                       {last.text
-                        ? last.text.slice(0, 30) + (last.text.length > 30 ? "…" : "")
+                        ? last.text.slice(0, 30) +
+                          (last.text.length > 30 ? "…" : "")
                         : "No messages yet"}
                     </span>
                   </div>
@@ -407,7 +417,6 @@ const Chat_list = ({ onUserSelect }) => {
           );
         })}
       </div>
-
     </div>
   );
 };
