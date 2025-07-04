@@ -24,8 +24,8 @@ const SendFileModel = () => {
         }}
       >
         <div style={{display:"flex", gap:"10px", alignItems:"center"}}>
-          <CiCamera  style={{color:"#4a4848"}}/>
-          <span style={{color:"#4a4848"}}>Camera</span>
+          <label for="file-upload" className="custom-file-upload"><CiCamera  style={{color:"#4a4848"}}/> <span style={{color:"#4a4848"}}>Camera</span></label>
+          <input id="file-upload" type="file" accept="image/*;capture=camera" style={{color:"#4a4848"}} />
         </div>
         <div style={{display:"flex", gap:"10px", alignItems:"center"}}>
           <label for="file-upload" className="custom-file-upload"><GrGallery style={{color:"#4a4848"}}/> Gallery</label>
