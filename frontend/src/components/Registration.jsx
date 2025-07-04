@@ -211,6 +211,7 @@ function RegistrationForm() {
     }
   }, []);
 
+
   const styles = {
     container: {
       fontFamily: "'Segoe UI', sans-serif",

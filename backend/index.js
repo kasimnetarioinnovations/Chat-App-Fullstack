@@ -177,10 +177,11 @@ const io = require("socket.io")(server, {
 let onlineUsers = new Set();
 
 io.on("connection", (socket) => {
-  console.log("User connected:", socket.id);
+  // console.log("User connected:", socket.id);
 
   // ✅ Join room
   socket.on("join", (userId) => {
+    if (!userId) return;
     socket.join(userId);
     socket.userId = userId;
     onlineUsers.add(userId);
