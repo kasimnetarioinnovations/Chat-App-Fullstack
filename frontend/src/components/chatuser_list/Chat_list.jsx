@@ -122,7 +122,9 @@ const getLastMessageData = (userId) => {
         <CiSearch />
       </div>
 
+      {/* users */}
       <div className="chat-list-usersection">
+
         {error && <p>{error}</p>}
 
         {filteredUsers.map((users) => (
@@ -144,12 +146,13 @@ const getLastMessageData = (userId) => {
                     className="chat-list-user-image"
                   />
                 ) : (
-                  <div className="user-initials">
+                  <div className="user-initials" style={{}}>
                     {users.name.slice(0, 2).toUpperCase()}
                   </div>
                 )}
                 
               </div>
+
                 <div
               style={{
                 backgroundColor: "green",
@@ -182,14 +185,15 @@ const getLastMessageData = (userId) => {
               <br />
               <span
                 className="txt"
-                style={{ display: "flex", justifyContent: "end" }}
+                style={{ backgroundColor:'orange', color:'white', padding:'3px 4px', borderRadius:'50%' }}
               >
-                52
+                55
               </span>
             </div>
           </div>
         ))}
       </div>
+
     </div>
   );
 };

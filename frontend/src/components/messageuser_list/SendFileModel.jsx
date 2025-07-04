@@ -4,6 +4,7 @@ import { GrGallery } from "react-icons/gr";
 import { MdOutlineAudiotrack } from "react-icons/md";
 import { VscLocation } from "react-icons/vsc";
 import { RiUserFollowLine } from "react-icons/ri";
+import './sendFileModel.css';
 
 const SendFileModel = () => {
   return (
@@ -27,8 +28,8 @@ const SendFileModel = () => {
           <span style={{color:"#4a4848"}}>Camera</span>
         </div>
         <div style={{display:"flex", gap:"10px", alignItems:"center"}}>
-          <GrGallery style={{color:"#4a4848"}}/>
-          <span style={{color:"#4a4848"}}>Gallery</span>
+          <label for="file-upload" className="custom-file-upload"><GrGallery style={{color:"#4a4848"}}/> Gallery</label>
+          <input id="file-upload" type="file" accept=".jpg, .jpeg, .pdf, image/jpeg, application/pdf" style={{color:"#4a4848"}} />
         </div>
         <div style={{display:"flex", gap:"10px", alignItems:"center"}}>
           <MdOutlineAudiotrack  style={{color:"#4a4848"}}/>

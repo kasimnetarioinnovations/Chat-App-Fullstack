@@ -304,15 +304,18 @@ const isUserOnline = (userId) => {
 
                 </span>
               )}
+
+              <div>
               <div className="message-box">
                 <p className="mb-0">{msg.text}</p>
               </div>
-              
-                <div style={{ fontSize: "11px", color: "#888", marginTop: "4px" }}>
+              <div style={{ fontSize: "11px", color: "#888", marginTop: "4px", textAlign: msg.sender === user ? "right" : "left", marginRight: msg.sender === user ? "-40px" : "0px", marginLeft: msg.sender === user ? "" : "-40px" }}>
                   {msg.timestamp && new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   {" · "}
                   {msg.sender === user ? "You" : selectedUser?.name}
-                </div>
+              </div>
+              </div>
+                
                 
               {msg.sender === user && (
                 <span
@@ -342,7 +345,7 @@ const isUserOnline = (userId) => {
             </div>
           ))}
 
-          <div className="message-date d-flex justify-content-center align-items-center">
+          {/* <div className="message-date d-flex justify-content-center align-items-center">
             <hr style={{ width: "100% " }} />
             <div
               style={{
@@ -357,7 +360,7 @@ const isUserOnline = (userId) => {
               Today, July 02
             </div>
             <hr style={{ width: "100% " }} />
-          </div>
+          </div> */}
 
           {error && <p style={{ textAlign: "center" }}>{error}</p>}
         </div>
