@@ -442,8 +442,9 @@ const isUserOnline = (userId) => {
               >
                 <GrEmoji style={{ fontSize: "20px" }} />
                 
-                <label for="file-upload" className="custom-file-upload"><CiFolderOn style={{ fontSize: "20px" }} /></label>
-                <input id="file-upload" type="file" style={{color:"#4a4848"}} />
+                <label for="file-upload1" className="custom-file-upload1"><CiFolderOn style={{ fontSize: "20px" }} /></label>
+                <input id="file-upload1" type="file" style={{color:"#4a4848"}} />
+                
                 <span
                   onClick={() => setClickDropdownTwo(!clickDropdowntwo)}
                   style={{ color: "grey", position: "relative" }}

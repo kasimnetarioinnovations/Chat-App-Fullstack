@@ -202,6 +202,7 @@ import React, { useEffect, useState } from "react";
 import "./Chat_list.css";
 import { CiSearch } from "react-icons/ci";
 import { io } from "socket.io-client";
+import { Link } from "react-router-dom";
 
 const Chat_list = ({ onUserSelect }) => {
   const backendurl = import.meta.env.VITE_BACKEND_URL;
@@ -307,7 +308,7 @@ const Chat_list = ({ onUserSelect }) => {
 
   // ✅ Early return if no user logged in
   if (!currentUser?._id) {
-    return <p>Please log in to view your chats.</p>;
+    return <p>Please <Link to="/register">login</Link> to view your chats.</p>;
   }
 
   return (

@@ -58,3 +58,16 @@ you-message-conatiner {
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
 }
+
+input[type="file"] {
+  display: none;
+}
+
+.custom-file-upload1 {
+  display: inline-block;
+  cursor: pointer;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
